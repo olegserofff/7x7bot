@@ -1,4 +1,6 @@
 Django
 Pillow
-python-telegram-bot
-celery
+django-tgbot
+python-dotenv
+mysqlclient
+gunicorn

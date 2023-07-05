@@ -7,8 +7,8 @@ class Question(models.Model):
     image = models.ImageField(verbose_name='Иллюстрация', blank=True, null=True)
 
     class Meta:
-        verbose_name='Вопрос'
-        verbose_name_plural='Вопросы'
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
 
     def __str__(self):
         return self.header
@@ -26,8 +26,7 @@ class Answer(models.Model):
     health_change = models.IntegerField(default=0, verbose_name='Изменение здоровья')
     money_change = models.IntegerField(default=0, verbose_name='Изменение денег')
     morality_change = models.IntegerField(default=0, verbose_name='Изменение нравственности')
-    next_question = models.ForeignKey(Question, on_delete=models.CASCADE,
-                                      null=True, blank=True, related_name='previous', verbose_name='Следующий вопрос')
+    next_question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='previous', verbose_name='Следующий вопрос')
 
     class Meta:
         verbose_name='Ответ'
@@ -36,17 +35,5 @@ class Answer(models.Model):
     def __str__(self):
         return self.text
 
-
-class Player(models.Model):
-    telegram_chat_id = models.CharField(max_length=200, verbose_name='ID чата Telegram')
-    current_question_id = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Текущий вопрос')
-    health = models.IntegerField(default=5, verbose_name='Здоровье')
-    money = models.IntegerField(default=5, verbose_name='Деньги')
-    morality = models.IntegerField(default=5, verbose_name='Нравственность')
-
-    class Meta:
-        verbose_name='Участник'
-        verbose_name_plural='Участники'
-
-    def __str__(self):
-        return self.text
+    def is_visible(self, health, money, morality):
+        return self.min_health <= health <= self.max_health and self.min_money <= money <= self.max_money and self.min_morality <= morality <= self.max_morality
